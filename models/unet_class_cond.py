@@ -33,6 +33,8 @@ class Unet(nn.Module):
         assert len(self.attns) == len(self.down_channels) - 1
         
         ######## Class, Mask and Text Conditioning Config #####
+        self.text_cond = False
+        self.text_embed_dim = None
         self.class_cond = False
         self.condition_config = get_config_value(model_config, 'condition_config', None)
 
@@ -51,7 +53,7 @@ class Unet(nn.Module):
                                           self.t_emb_dim)
         
         self.conv_in = nn.Conv2d(im_channels, self.down_channels[0], kernel_size=3, padding=1)
-        self.cond = self.text_cond or self.image_cond or self.class_cond
+        self.cond = self.class_cond
         ###################################
         
         # Initial projection from sinusoidal time embedding
